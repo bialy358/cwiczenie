@@ -8,10 +8,9 @@ class AdminController < ApplicationController
   private
 
   def require_admin
-    if current_user.nil? || !current_user.admin?
-      flash[:error] = 'Entrance permited. Admin require'
-      redirect_to root_path
-    end
+    return if current_user && current_user.admin
+    flash[:error] = 'Entrance permited. Admin require'
+    redirect_to root_path
   end
 
 end
