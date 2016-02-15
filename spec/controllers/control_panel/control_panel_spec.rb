@@ -7,12 +7,14 @@ RSpec.describe ControlPanel::StaticPagesController do
       get :index
       expect(response).to redirect_to(root_path)
     end
-    it "let you pass if you are logged in" do
-      allow(controller).to receive(:current_user).and_return(user)
-      get :index
-      expect(response).to render_template(:index)
+    context "after sign in" do
+      before do
+        sign_in(user)
+      end
+      it "let you pass if you are logged in" do
+        get :index
+        expect(response).to render_template(:index)
+        end
     end
   end
-
-
 end
