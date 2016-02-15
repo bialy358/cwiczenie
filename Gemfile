@@ -13,10 +13,15 @@ gem 'devise', '~> 3.5.2'
 gem 'bootstrap-sass', '~> 3.3.6'
 gem 'pry'
 
-
-group :development, :test do
-  gem 'byebug'
+group :development do
   gem 'web-console', '~> 2.0'
+end
+group :development, :test do
+  gem 'factory_girl_rails', '~> 4.0'
+  gem 'byebug'
+
   gem 'spring'
+  gem 'rspec-rails', '~> 3.0'
+  gem 'database_cleaner', '~> 1.5.1'
 end
 
