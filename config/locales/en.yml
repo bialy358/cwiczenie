@@ -21,4 +21,5 @@
 
 en:
   admin:
-    failure: Entrance permited. Admin status required.
+    auth:
+      failure: Entrance permited. Admin status required.

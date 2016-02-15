@@ -6,7 +6,7 @@ class Admin::AdminController < ApplicationController
 
   def require_admin
     return if current_user && current_user.admin
-    redirect_to root_path, alert: t('admin.failure')
+    redirect_to root_path, alert: t('admin.auth.failure')
   end
 
 end
