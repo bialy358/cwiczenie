@@ -7,12 +7,10 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-<%= render partial: 'admin/navbar' %>
-<% flash.each do |status, msg| %>
-    <%= content_tag :div, msg, class: status %>
-<% end %>
+    <%= render partial: 'admin/navbar' %>
+    <%= render partial: 'shared/flash' if !flash.empty?  %>
 
-<%= yield %>
+    <%= yield %>
 
 </body>
 </html>
