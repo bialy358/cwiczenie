@@ -23,3 +23,6 @@ en:
   admin:
     auth:
       failure: Entrance permited. Admin status required.
+  user:
+    auth:
+      failure: Entrance permited. Please log in.

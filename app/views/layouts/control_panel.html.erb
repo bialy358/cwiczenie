@@ -7,8 +7,8 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-    <%= render partial: 'admin/navbar' %>
-    <%= render partial: 'shared/flash' if !flash.empty?  %>
+    <%= render partial: 'control_panel/navbar' %>
+    <%= render partial: 'shared/flash' %>
 
     <%= yield %>
 
