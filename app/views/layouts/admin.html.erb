@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Cwiczenie</title>
+  <%= stylesheet_link_tag    'admin', media: 'all' %>
+  <%= javascript_include_tag 'admin' %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+<%= render partial: 'admin/navbar' %>
+<% flash.each do |status, msg| %>
+    <%= content_tag :div, msg, class: status %>
+<% end %>
+
+<%= yield %>
+
+</body>
+</html>
