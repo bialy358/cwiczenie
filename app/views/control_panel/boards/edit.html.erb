@@ -1,7 +1,6 @@
-<%= form_for(@board, as: :board, url: control_panel_board_path )  do |f| %>
+<%= form_for(@board, url: control_panel_board_path )  do |f| %>
     <%= f.label :name %>
     <%= f.text_field :name %>
     <br>
     <%= f.submit %>
-
 <% end %>

@@ -26,3 +26,7 @@ en:
   user:
     auth:
       failure: Entrance permited. Please log in.
+  shared:
+    created: Successfully created.
+    updated: Successfully updated.
+    destroyed: Successfully destroyed.

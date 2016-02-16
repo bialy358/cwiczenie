@@ -1,8 +1,9 @@
 class ControlPanel::BoardsController < ControlPanel::ControlPanelController
 
   def index
-    @boards = Board.where(owner_id: current_user.id)
+    @boards = current_user.boards
   end
+
   def show
     @board = Board.find(params[:id])
   end
@@ -10,12 +11,11 @@ class ControlPanel::BoardsController < ControlPanel::ControlPanelController
   def new
     @board = current_user.boards.new
   end
-
-
+  
   def create
     @board = current_user.boards.new(board_params)
     if @board.save
-      redirect_to control_panel_root_path
+      redirect_to control_panel_root_path, notice: t('shared.created')
     else
       render :new
     end
@@ -28,7 +28,7 @@ class ControlPanel::BoardsController < ControlPanel::ControlPanelController
   def update
     @board = Board.find(params[:id])
     if @board.update(board_params)
-    redirect_to control_panel_root_path
+      redirect_to control_panel_root_path, notice: t('shared.updated')
     else
       render :edit
     end
@@ -37,7 +37,7 @@ class ControlPanel::BoardsController < ControlPanel::ControlPanelController
   def destroy
     @board = Board.find(params[:id])
     @board.destroy
-    redirect_to control_panel_root_path
+    redirect_to control_panel_root_path, notice: t('shared.destroyed')
   end
 
   private
