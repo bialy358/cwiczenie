@@ -1,0 +1,6 @@
+<%= link_to 'Create Board', new_control_panel_board_path, class: 'btn btn-primary' %>
+
+<% @boards.each do |board| %>
+    <br>
+    <%= link_to board.name, control_panel_board_path(board) %>
+<% end %>
