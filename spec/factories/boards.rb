@@ -1,7 +1,7 @@
 FactoryGirl.define do
-  sequence :name do |n|
-    "example#{n}"
-  end
+
+  sequence(:name) { |n| "example#{n}" }
+
   factory :board do
     name
   end
