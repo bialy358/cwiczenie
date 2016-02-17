@@ -3,6 +3,8 @@ Rails.application.routes.draw do
   root 'welcome#index'
   namespace :control_panel do
     root 'boards#index'
-    resources :boards
+    resources :boards do
+      resources :stories
+    end
   end
 end

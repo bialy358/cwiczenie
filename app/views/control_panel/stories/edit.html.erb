@@ -1,0 +1,6 @@
+<%= form_for([@story, @story], url: control_panel_board_story_path) do |f| %>
+    <%= f.label :title %>
+    <%= f.text_field :title %>
+    <br>
+    <%= f.submit %>
+<% end %>

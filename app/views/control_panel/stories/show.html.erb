@@ -1,0 +1,10 @@
+<%= @story.title %>
+<br>
+<%= link_to edit_control_panel_board_story_path, class: 'btn btn-warning' do %>
+    Edit
+    <span class="glyphicon glyphicon-edit"></span>
+<% end %>
+<%= link_to control_panel_board_story_path, method: :delete, class: 'btn btn-danger' do %>
+    Delete
+    <span class="glyphicon glyphicon-remove"></span>
+<% end %>

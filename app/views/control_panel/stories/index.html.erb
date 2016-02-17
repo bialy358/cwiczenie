@@ -1,0 +1,6 @@
+<%= link_to 'Create Story', new_control_panel_board_story_path, class: 'btn btn-primary' %>
+
+<% @stories.each do |story| %>
+    <br>
+    <%= link_to story.title,control_panel_board_story_path(story.board_id, story) %>
+<% end %>

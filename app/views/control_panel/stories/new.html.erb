@@ -1,0 +1,9 @@
+<%= form_for [:control_panel, :board, @story] do |f|%>
+    <%= f.label :title %>
+    <%= f.text_field :title %>
+    <br>
+    <%= f.label :estimate %>
+    <%= f.number_field :estimate, collection: Story::ESTIMATES, include_blank: false %>
+    <br>
+    <%= f.submit %>
+<% end %>
