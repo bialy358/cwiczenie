@@ -3,7 +3,6 @@
 <head>
   <title>Cwiczenie</title>
   <%= stylesheet_link_tag    'control_panel/application', media: 'all' %>
-  <%= javascript_include_tag 'control_panel/application' %>
   <%= csrf_meta_tags %>
 </head>
 <body>
@@ -12,5 +11,6 @@
 
     <%= yield %>
 
+    <%= javascript_include_tag 'control_panel/application' %>
 </body>
 </html>
