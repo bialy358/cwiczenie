@@ -1,8 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Board, type: :model do
-  let(:board) { create :board, owner_id: user.id }
-  let(:user) { create :user}
+  let(:board) { create :board, name: 'a', owner_id: 1 }
 
   it "is valid with non empty name" do
     expect(board).to be_valid
@@ -14,6 +13,6 @@ RSpec.describe Board, type: :model do
 
   it "is invalid with 2 boards same name for 1 user" do
     board
-    expect( build(:board, owner_id: user.id)).to_not be_valid
+    expect( build( :board, name: 'a', owner_id: 1 )).to_not be_valid
   end
 end

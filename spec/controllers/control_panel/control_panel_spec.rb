@@ -3,168 +3,254 @@ require 'rails_helper'
 RSpec.describe ControlPanel::BoardsController do
   let(:user) { create :user }
   let(:board) {create :board, owner_id: user.id}
-  describe "index" do
 
-    context "before sign in" do
-      it "don't let you pass if you are not logged in"  do
-        get :index
-        expect(response).to redirect_to(root_path)
-      end
-      it "flashes user auth warning message" do
-        get :index
-        expect(flash[:alert]).to eq I18n.t('user.auth.failure')
-      end
-    end
+  context "User signed in" do
 
-    context "after sign in" do
-      before { sign_in(user) }
+    before { sign_in(user) }
 
-      it "let you pass if you are logged in" do
+    describe " GET #index" do
+
+      it "renders boards#index" do
         get :index
         expect(response).to render_template :index
-        end
-    end
-  end
-
-  describe "new" do
-    it "go into right template" do
-      sign_in(user)
-      get :new
-      expect(response).to render_template :new
-    end
-  end
-
-  describe "create" do
-    let(:request) {post :create, board: {name: 'cokolwiek'} }
-
-    context "success" do
-      before { sign_in(user) }
-
-      it "change count of Boards" do
-        expect { request }.to change {Board.count}.by(1)
-      end
-
-      it "redirects properly" do
-        request
-        expect(response).to redirect_to control_panel_root_path
-      end
-
-      it "give 302 http code" do
-        request
-        expect(response).to have_http_status(302)
-      end
-      it "flash message" do
-        request
-        expect(flash[:notice]).to eq I18n.t('shared.created')
       end
     end
 
-    context "failure" do
-      it "couse u are not logged in" do
-        expect { request }.to change {Board.count}.by(0)
-      end
-      it "flashes user auth warning message" do
-        request
-        expect(flash[:alert]).to eq I18n.t('user.auth.failure')
-      end
-
-      it "does not create board" do
-        sign_in(user)
-        allow_any_instance_of(Board).to receive(:save) { false }
-        request
+    describe "GET #new" do
+      it "renders boards#new" do
+        get :new
         expect(response).to render_template :new
       end
     end
-  end
 
-  describe "show" do
-    it "renders show" do
-      sign_in(user)
-      get :show, id: board.id
-      expect(response).to render_template :show
-    end
+    describe "POST #create" do
 
-  end
+      let(:request) { post :create, board: { name: 'cokolwiek' } }
 
-  describe "edit" do
-    it "renders edit" do
-      sign_in(user)
-      get :edit, id: board.id
-      expect(response).to render_template :edit
-    end
-  end
+      context "success" do
 
-  describe "update" do
-    let!(:board) {create :board, owner_id: user.id}
-    let!(:params) do
-      { id: board.id, board: { name: 'cokolwiek'} }
-      end
-    let(:request) { put :update, params }
+        it "changes count of Boards" do
+          expect { request }.to change { Board.count }.by(1)
+        end
 
-    context "success" do
-      before { sign_in(user) }
+        it "redirects properly" do
+          request
+          expect(response).to redirect_to control_panel_root_path
+        end
 
-      it "change name of boards" do
-        expect { request }.to change{ board.reload.name }.to('cokolwiek')
+        it "gives 302 http code" do
+          request
+          expect(response).to have_http_status(302)
+        end
+        it "flashes message" do
+          request
+          expect(flash[:notice]).to eq I18n.t('shared.created')
+        end
       end
 
-      it "redirects properly" do
-        request
-        expect(response).to redirect_to control_panel_root_path
-      end
+      context "failure" do
 
-      it "give 302 http code" do
-        request
-        expect(response).to have_http_status(302)
-      end
-      it "flash message" do
-        request
-        expect(flash[:notice]).to eq I18n.t('shared.updated')
+        before do
+          allow_any_instance_of(Board).to receive(:save) { false }
+          request
+        end
+
+        it "renders boards#new" do
+          expect(response).to render_template :new
+        end
+
+        it "doesn't change Board count" do
+          expect { request }.to_not change { Board.count }
+        end
       end
     end
 
-    context "failure" do
-      it "does not update board" do
-        sign_in(user)
-        allow_any_instance_of(Board).to receive(:update) { false }
-        request
+    describe "GET #show" do
+
+      it "renders boards#show" do
+        get :show, id: board.id
+        expect(response).to render_template :show
+      end
+    end
+
+    describe "GET #edit" do
+
+      it "renders boards#edit" do
+        get :edit, id: board.id
         expect(response).to render_template :edit
       end
-      it "flashes user auth warning message" do
-        request
-        expect(flash[:alert]).to eq I18n.t('user.auth.failure')
+    end
+
+    describe "PUT #update" do
+
+      let!(:board) {create :board, owner_id: user.id}
+      let!(:params) do
+        { id: board.id, board: { name: 'cokolwiek'} }
+      end
+      let(:request) { put :update, params }
+
+      context "success" do
+
+        it "changes name of boards" do
+          expect { request }.to change{ board.reload.name }.to('cokolwiek')
+        end
+
+        it "redirects properly" do
+          request
+          expect(response).to redirect_to control_panel_root_path
+        end
+
+        it "gives 302 http code" do
+          request
+          expect(response).to have_http_status(302)
+        end
+
+        it "flashes message" do
+          request
+          expect(flash[:notice]).to eq I18n.t('shared.updated')
+        end
+      end
+
+      context "failure" do
+
+        it "renders boards#edit" do
+          allow_any_instance_of(Board).to receive(:update) { false }
+          request
+          expect(response).to render_template :edit
+        end
       end
     end
-  end
 
-  describe "destroy" do
-    let!(:board) { create :board }
-    let(:request) { delete :destroy, id: board.id }
+    describe "DELETE #destroy" do
 
-    context "user logged in" do
-      before do
-        sign_in(user)
-      end
+      let!(:board) { create :board }
+      let(:request) { delete :destroy, id: board.id }
+
       it "change count of Board by -1" do
         expect{ request }.to change{ Board.count }.by(-1)
       end
+
       it "redirects to root" do
         request
         expect(response).to redirect_to control_panel_root_path
       end
-      it "flash message" do
+
+      it "flashes message" do
         request
         expect(flash[:notice]).to eq I18n.t('shared.destroyed')
       end
     end
-    context "user not logged in" do
-      it "redirects user to root" do
+  end
+####################################################################################################
+  context "User not signed in" do
+
+    describe "GET #index" do
+
+      it "renders root"  do
+        get :index
+        expect(response).to redirect_to(root_path)
+      end
+
+      it "flashes user auth warning message" do
+        get :index
+        expect(flash[:alert]).to eq I18n.t('user.auth.failure')
+      end
+    end
+
+    describe "GET #new" do
+
+      it "renders root"  do
+        get :new
+        expect(response).to redirect_to(root_path)
+      end
+
+      it "flashes user auth warning message" do
+        get :new
+        expect(flash[:alert]).to eq I18n.t('user.auth.failure')
+      end
+    end
+
+    describe "POST #create" do
+
+      let(:request) {post :create, board: {name: 'cokolwiek'} }
+
+      it "doesn't change Board count" do
+        expect { request }.to_not change {Board.count}
+      end
+
+      it "flashes user auth warning message" do
+        request
+        expect(flash[:alert]).to eq I18n.t('user.auth.failure')
+      end
+      it "redirects to root" do
+        request
+        expect(response).to redirect_to root_path
+      end
+    end
+
+    describe "GET #show" do
+
+      it "redirects to root" do
+        get :show, id: board.id
+        expect(response).to redirect_to root_path
+      end
+
+      it "flashes user auth warning message" do
+        get :show, id: board.id
+        expect(flash[:alert]).to eq I18n.t('user.auth.failure')
+      end
+    end
+
+    describe "GET #edit" do
+
+      it "redirects to root" do
+        get :edit, id: board.id
+        expect(response).to redirect_to root_path
+      end
+
+      it "flashes user auth warning message" do
+        get :edit, id: board.id
+        expect(flash[:alert]).to eq I18n.t('user.auth.failure')
+      end
+    end
+
+    describe "PUT #update" do
+
+      let!(:board) {create :board, owner_id: user.id}
+      let!(:params) do
+        { id: board.id, board: { name: 'cokolwiek'} }
+      end
+      let(:request) { put :update, params }
+
+      it "doesn't change Board count" do
+          expect { request }.to_not change{ board.reload.name }
+      end
+
+      it "flashes user auth warning message" do
+        request
+        expect(flash[:alert]).to eq I18n.t('user.auth.failure')
+      end
+
+      it "redirects to root" do
+        request
+        expect(response).to redirect_to root_path
+      end
+    end
+
+    describe "DELETE #destroy" do
+
+      let!(:board) { create :board }
+      let(:request) { delete :destroy, id: board.id }
+
+      it "redirects to root" do
         request
         expect(response).to redirect_to root_url
       end
-      it "don't change count of Board" do
+
+      it "doesn't change count of Board" do
         expect{ request }.to_not change{ Board.count }
       end
+
       it "flashes user auth warning message" do
         request
         expect(flash[:alert]).to eq I18n.t('user.auth.failure')
