@@ -5,11 +5,9 @@ RSpec.describe ControlPanel::BoardsController do
   let(:board) {create :board, owner_id: user.id}
 
   context "User signed in" do
-
     before { sign_in(user) }
 
     describe " GET #index" do
-
       it "renders boards#index" do
         get :index
         expect(response).to render_template :index
@@ -24,11 +22,9 @@ RSpec.describe ControlPanel::BoardsController do
     end
 
     describe "POST #create" do
-
       let(:request) { post :create, board: { name: 'cokolwiek' } }
 
       context "success" do
-
         it "changes count of Boards" do
           expect { request }.to change { Board.count }.by(1)
         end
@@ -42,14 +38,14 @@ RSpec.describe ControlPanel::BoardsController do
           request
           expect(response).to have_http_status(302)
         end
+
         it "flashes message" do
           request
           expect(flash[:notice]).to eq I18n.t('shared.created')
         end
-      end
+      end #context 'success'
 
       context "failure" do
-
         before do
           allow_any_instance_of(Board).to receive(:save) { false }
           request
@@ -62,11 +58,10 @@ RSpec.describe ControlPanel::BoardsController do
         it "doesn't change Board count" do
           expect { request }.to_not change { Board.count }
         end
-      end
+      end #context 'failure'
     end
 
     describe "GET #show" do
-
       it "renders boards#show" do
         get :show, id: board.id
         expect(response).to render_template :show
@@ -74,7 +69,6 @@ RSpec.describe ControlPanel::BoardsController do
     end
 
     describe "GET #edit" do
-
       it "renders boards#edit" do
         get :edit, id: board.id
         expect(response).to render_template :edit
@@ -82,7 +76,6 @@ RSpec.describe ControlPanel::BoardsController do
     end
 
     describe "PUT #update" do
-
       let!(:board) {create :board, owner_id: user.id}
       let!(:params) do
         { id: board.id, board: { name: 'cokolwiek'} }
@@ -90,7 +83,6 @@ RSpec.describe ControlPanel::BoardsController do
       let(:request) { put :update, params }
 
       context "success" do
-
         it "changes name of boards" do
           expect { request }.to change{ board.reload.name }.to('cokolwiek')
         end
@@ -109,20 +101,25 @@ RSpec.describe ControlPanel::BoardsController do
           request
           expect(flash[:notice]).to eq I18n.t('shared.updated')
         end
-      end
+      end #context 'success'
 
       context "failure" do
-
-        it "renders boards#edit" do
+        before do
           allow_any_instance_of(Board).to receive(:update) { false }
           request
+        end
+
+        it "renders boards#edit" do
           expect(response).to render_template :edit
         end
-      end
+
+        it "doesn't change Board name" do
+          expect { request }.to_not change{ board.reload.name }
+        end
+      end #context 'failure'
     end
 
     describe "DELETE #destroy" do
-
       let!(:board) { create :board }
       let(:request) { delete :destroy, id: board.id }
 
@@ -140,12 +137,10 @@ RSpec.describe ControlPanel::BoardsController do
         expect(flash[:notice]).to eq I18n.t('shared.destroyed')
       end
     end
-  end
-####################################################################################################
+  end # context 'User signed in'
+
   context "User not signed in" do
-
     describe "GET #index" do
-
       it "renders root"  do
         get :index
         expect(response).to redirect_to(root_path)
@@ -158,7 +153,6 @@ RSpec.describe ControlPanel::BoardsController do
     end
 
     describe "GET #new" do
-
       it "renders root"  do
         get :new
         expect(response).to redirect_to(root_path)
@@ -171,7 +165,6 @@ RSpec.describe ControlPanel::BoardsController do
     end
 
     describe "POST #create" do
-
       let(:request) {post :create, board: {name: 'cokolwiek'} }
 
       it "doesn't change Board count" do
@@ -182,6 +175,7 @@ RSpec.describe ControlPanel::BoardsController do
         request
         expect(flash[:alert]).to eq I18n.t('user.auth.failure')
       end
+
       it "redirects to root" do
         request
         expect(response).to redirect_to root_path
@@ -189,7 +183,6 @@ RSpec.describe ControlPanel::BoardsController do
     end
 
     describe "GET #show" do
-
       it "redirects to root" do
         get :show, id: board.id
         expect(response).to redirect_to root_path
@@ -202,7 +195,6 @@ RSpec.describe ControlPanel::BoardsController do
     end
 
     describe "GET #edit" do
-
       it "redirects to root" do
         get :edit, id: board.id
         expect(response).to redirect_to root_path
@@ -215,14 +207,13 @@ RSpec.describe ControlPanel::BoardsController do
     end
 
     describe "PUT #update" do
-
       let!(:board) {create :board, owner_id: user.id}
       let!(:params) do
         { id: board.id, board: { name: 'cokolwiek'} }
       end
       let(:request) { put :update, params }
 
-      it "doesn't change Board count" do
+      it "doesn't change Board name" do
           expect { request }.to_not change{ board.reload.name }
       end
 
@@ -238,7 +229,6 @@ RSpec.describe ControlPanel::BoardsController do
     end
 
     describe "DELETE #destroy" do
-
       let!(:board) { create :board }
       let(:request) { delete :destroy, id: board.id }
 
