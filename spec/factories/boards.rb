@@ -1,6 +1,5 @@
 FactoryGirl.define do
-  factory :boards do
-    
+  factory :board do
+    name 'example1'
   end
-
 end
