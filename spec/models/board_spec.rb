@@ -7,7 +7,7 @@ RSpec.describe Board, type: :model do
     expect(board).to be_valid
   end
 
-  it "is valid with non empty name" do
+  it "is invalid with non empty name" do
     expect( build(:board, name: nil)).to_not be_valid
   end
 
