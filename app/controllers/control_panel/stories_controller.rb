@@ -1,7 +1,7 @@
 class ControlPanel::StoriesController < ControlPanel::ControlPanelController
 
   def index
-    board = Board.find(params[:board_id])
+    board = find_board
     @stories = board.stories
   end
 
@@ -10,29 +10,30 @@ class ControlPanel::StoriesController < ControlPanel::ControlPanelController
   end
 
   def new
-    board = Board.find(params[:board_id])
-    @story = board.stories.new
+    @board = find_board
+    @story = @board.stories.new
   end
 
   def create
-    board = Board.find(params[:board_id])
-    @story = board.stories.new(story_params)
+    @board = find_board
+    @story = @board.stories.new(story_params)
     if @story.save
-      redirect_to control_panel_root_path, notice: t('shared.created')
+      redirect_to control_panel_board_path(@board), notice: t('shared.created')
     else
       render :new
     end
   end
 
   def edit
-    board = Board.find(params[:board_id])
-    @story = board.stories.find(params[:id])
+    @board = find_board
+    @story = @board.stories.find(params[:id])
   end
 
   def update
+    @board = find_board
     @story = Story.find(params[:id])
     if @story.update(story_params)
-      redirect_to control_panel_root_path, notice: t('shared.updated')
+      redirect_to control_panel_board_path(@board), notice: t('shared.updated')
     else
       render :edit
     end
@@ -48,5 +49,9 @@ class ControlPanel::StoriesController < ControlPanel::ControlPanelController
 
   def story_params
     params.require(:story).permit(:title, :description, :status, :estimate)
+  end
+
+  def find_board
+    Board.find(params[:board_id])
   end
 end
