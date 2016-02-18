@@ -246,5 +246,5 @@ RSpec.describe ControlPanel::BoardsController do
         expect(flash[:alert]).to eq I18n.t('user.auth.failure')
       end
     end
-  end
+  end #context 'User not signed in'
 end
