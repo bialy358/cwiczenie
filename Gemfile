@@ -24,4 +24,7 @@ group :development, :test do
   gem 'rspec-rails', '~> 3.0'
   gem 'database_cleaner', '~> 1.5.1'
 end
+group :test do
+  gem 'simplecov', '~>0.9.1', :require => false
+end
 
