@@ -40,9 +40,10 @@ class ControlPanel::StoriesController < ControlPanel::ControlPanelController
   end
 
   def destroy
+    @board = find_board
     @story = Story.find(params[:id])
     @story.destroy
-    redirect_to control_panel_root_path, notice: t('shared.destroyed')
+    redirect_to control_panel_board_path(@board), notice: t('shared.destroyed')
   end
 
   private
