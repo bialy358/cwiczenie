@@ -1,0 +1,13 @@
+<%= form_for [:control_panel, @board, @story] do |f| %>
+    <%= f.label :title %>
+    <%= f.text_field :title %>
+    <br>
+    <%= f.label :description %>
+    <%= f.text_area :description %>
+    <br>
+    <br>
+    <%= f.label :estimate %>
+    <%= f.select :estimate, Story::ESTIMATES, include_blank: false %>
+    <br>
+    <%= f.submit %>
+<% end %>
