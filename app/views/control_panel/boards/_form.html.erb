@@ -1,0 +1,7 @@
+<%= form_for [:control_panel, @board] do |f| %>
+    <%= render partial: 'shared/error', locals: {f: @board} %>
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+    <br>
+    <%= f.submit %>
+<% end %>

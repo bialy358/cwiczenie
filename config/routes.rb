@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   namespace :control_panel do
     root 'boards#index'
     resources :boards do
+      resources :members
       resources :stories
     end
   end
