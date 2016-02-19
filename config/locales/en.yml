@@ -26,7 +26,12 @@ en:
   user:
     auth:
       failure: Entrance permited. Please log in.
-  shared:
+  owner:
+    auth:
+      failure: Sorry u can't make it, you are not owner of this board.
+  member:
+    auth:
+      failure: Sorry but u are not member of this board.
     created: Successfully created.
     updated: Successfully updated.
     destroyed: Successfully destroyed.
