@@ -1,6 +1,5 @@
 class ControlPanel::StoriesController < ControlPanel::ControlPanelController
 
-  before_action :require_member
   def index
     board = find_board
     @stories = board.stories
@@ -56,10 +55,4 @@ class ControlPanel::StoriesController < ControlPanel::ControlPanelController
   def find_board
     Board.find(params[:board_id])
   end
-
-  def require_member
-    return if find_board.members.map { |a| a.user_id}.include?(current_user.id) || current_user.id == find_board.owner_id
-    redirect_to control_panel_root_path, alert: t('member.auth.failure')
-  end
-
 end

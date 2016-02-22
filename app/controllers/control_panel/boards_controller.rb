@@ -1,12 +1,11 @@
 class ControlPanel::BoardsController < ControlPanel::ControlPanelController
-  before_action :require_owner, only: [:edit, :update, :destroy]
 
   def index
-    @boards = current_user.boards + Board.of_members(current_user)
+    @boards = current_user.boards
   end
 
   def show
-    @board = find_board
+    @board = Board.find(params[:id])
   end
 
   def new
@@ -23,11 +22,11 @@ class ControlPanel::BoardsController < ControlPanel::ControlPanelController
   end
 
   def edit
-    @board = find_board
+    @board = Board.find(params[:id])
   end
 
   def update
-    @board = find_board
+    @board = Board.find(params[:id])
     if @board.update(board_params)
       redirect_to control_panel_root_path, notice: t('shared.updated')
     else
@@ -42,16 +41,8 @@ class ControlPanel::BoardsController < ControlPanel::ControlPanelController
   end
 
   private
-  def find_board
-    Board.find(params[:id])
-  end
 
   def board_params
     params.require(:board).permit(:name)
-  end
-
-  def require_owner
-    return if current_user.id == find_board.owner_id
-    redirect_to control_panel_root_path, alert: t('owner.auth.failure')
   end
 end

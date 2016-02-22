@@ -1,1 +1,6 @@
-<%= render partial: 'form' %>
+<%= form_for [:control_panel, @board] do |f| %>
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+    <br>
+    <%= f.submit %>
+<% end %>

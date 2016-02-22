@@ -1,9 +1,0 @@
-
-<%= form_for [:control_panel, @board, @member], url: control_panel_board_members_path do |f| %>
-    <%= render partial: 'shared/error', locals: {f: @member} %>
-    <%= f.label :email %>
-    <%= f.email_field :email %>
-
-    <br>
-    <%= f.submit %>
-<% end %>

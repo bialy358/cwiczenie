@@ -120,7 +120,7 @@ RSpec.describe ControlPanel::BoardsController do
     end
 
     describe "DELETE #destroy" do
-      let!(:board) { create :board, owner_id: user.id }
+      let!(:board) { create :board }
       let(:request) { delete :destroy, id: board.id }
 
       it "change count of Board by -1" do
