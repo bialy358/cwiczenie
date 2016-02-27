@@ -1,0 +1,7 @@
+<%= form_for [:control_panel, @member_form], url: control_panel_board_members_path do |f| %>
+    <%= f.label :email %>
+    <%= f.text_field :email %>
+    <%= f.hidden_field :board_id, value: @board.id %>
+    <br>
+    <%= f.submit %>
+<% end %>

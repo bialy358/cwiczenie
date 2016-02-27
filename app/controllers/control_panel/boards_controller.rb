@@ -1,11 +1,13 @@
 class ControlPanel::BoardsController < ControlPanel::ControlPanelController
+  before_action :require_member, except: [:index, :new, :create]
+  before_action :require_owner, only: [:edit, :update, :destroy]
 
   def index
     @boards = current_user.boards
   end
 
   def show
-    @board = Board.find(params[:id])
+    @board = find_board
   end
 
   def new
@@ -14,6 +16,7 @@ class ControlPanel::BoardsController < ControlPanel::ControlPanelController
   
   def create
     @board = current_user.boards.new(board_params)
+    @board.owner = current_user
     if @board.save
       redirect_to control_panel_root_path, notice: t('shared.created')
     else
@@ -22,11 +25,11 @@ class ControlPanel::BoardsController < ControlPanel::ControlPanelController
   end
 
   def edit
-    @board = Board.find(params[:id])
+    @board = find_board
   end
 
   def update
-    @board = Board.find(params[:id])
+    @board = find_board
     if @board.update(board_params)
       redirect_to control_panel_root_path, notice: t('shared.updated')
     else
@@ -35,7 +38,7 @@ class ControlPanel::BoardsController < ControlPanel::ControlPanelController
   end
 
   def destroy
-    @board = Board.find(params[:id])
+    @board = find_board
     @board.destroy
     redirect_to control_panel_root_path, notice: t('shared.destroyed')
   end
@@ -44,5 +47,9 @@ class ControlPanel::BoardsController < ControlPanel::ControlPanelController
 
   def board_params
     params.require(:board).permit(:name)
+  end
+
+  def find_board
+    Board.find(params[:id])
   end
 end

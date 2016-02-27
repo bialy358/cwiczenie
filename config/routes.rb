@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     root 'boards#index'
     resources :boards do
       resources :stories
+      resources :members
     end
   end
 end
