@@ -7,9 +7,10 @@ class MemberForm
 
   attr_reader :member_form
 
- validates :email, presence: true, format: { with: /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/, message: 'incorrect email'}
- validates :board_id, presence: true
- validate :user?
+  validates :email, presence: true, format: { with: /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/, message: 'incorrect email'}
+  validates :board_id, presence: true
+  validate :user_presence
+  validate :user_owner?
 
   def save
     if valid?
@@ -21,20 +22,23 @@ class MemberForm
   end
 
   private
-  def user?
-    user = User.find_by(email: email)
-    board = Board.find(board_id)
-    unless user
-      errors.add(:email, 'There is not such user')
-    else
-      if user.id == board.owner_id
-        errors.add(:email, 'You are owner of this board')
-      end
+  def user_presence
+    errors.add(:email, 'There is not such user') unless correct_params?
+  end
+
+  def user_owner?
+    unless user_presence
+      errors.add(:email, 'You are owner of this board') if @user.id == @board.owner_id
     end
   end
 
+  def correct_params?
+    return @user if defined?(@user)
+    @user = User.find_by(email: email)
+    @board = Board.find(board_id)
+  end
+
   def persist!
-    user = User.find_by(email: email)
-    @member_form = Member.create!(user_id: user.id, board_id: board_id)
+    @member_form = Member.create!(user_id: @user.id, board_id: @board.id)
   end
 end
