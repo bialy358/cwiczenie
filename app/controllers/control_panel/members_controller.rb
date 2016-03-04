@@ -3,7 +3,7 @@ before_action :require_owner, except: :index
 
   def index
     @board = find_board
-    @members = @board.members.all.decorate
+    @members = @board.members.decorate
   end
 
   def show
@@ -26,15 +26,14 @@ before_action :require_owner, except: :index
   end
 
   def destroy
-    @board =find_board
-    @members = @board.members.all.decorate
+    @board = find_board
+    @members = @board.members.decorate
     @member = Member.find(params[:id])
     if @board.owner_id == @member.user_id
-
-      render :index
+      redirect_to control_panel_board_members_path(@board), notice: "You can't delete yourself"
     else
       @member.destroy
-      redirect_to control_panel_board_path(find_board)
+      redirect_to control_panel_board_path(@board)
     end
   end
 
