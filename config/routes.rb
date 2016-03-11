@@ -5,7 +5,7 @@ Rails.application.routes.draw do
     root 'boards#index'
     resources :boards do
       resources :stories
-      resources :members, expect: [:show, :edit, :update]
+      resources :members, except: [:show, :edit, :update]
     end
   end
 end
