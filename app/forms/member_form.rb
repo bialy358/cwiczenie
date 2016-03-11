@@ -1,13 +1,11 @@
 class MemberForm
   include ActiveModel::Model
-  include Virtus
 
-  attribute :email, String
-  attribute :board_id, Integer
+  attr_accessor :email, :board_id
 
-  attr_reader :member_form
+  REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/
 
-  validates :email, presence: true, format: { with: /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/, message: 'incorrect email'}
+  validates :email, presence: true, format: { with: REGEX, message: 'incorrect email'}
   validates :board_id, presence: true
   validate :user_presence
   validate :user_owner?
