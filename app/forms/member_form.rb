@@ -7,8 +7,9 @@ class MemberForm
 
   validates :email, presence: true, format: { with: REGEX, message: 'incorrect email'}
   validates :board_id, presence: true
-  validate :user_presence
-  validate :user_owner?
+  validate :user_is_not_present
+  validate :new_member_is_owner
+  validate :member_already_exist
 
   def save
     if valid?
@@ -20,20 +21,29 @@ class MemberForm
   end
 
   private
-  def user_presence
-    errors.add(:email, 'There is not such user') unless correct_params?
+
+  def user_is_not_present
+    errors.add(:email, 'There is not such user') unless user_found?
   end
 
-  def user_owner?
-    unless user_presence
+  def new_member_is_owner
+    if user_found?
       errors.add(:email, 'You are owner of this board') if @user.id == @board.owner_id
     end
+
   end
 
-  def correct_params?
-    return @user if defined?(@user)
-    @user = User.find_by(email: email)
+  def user_found?
+    return true if @user
     @board = Board.find(board_id)
+    @user = User.find_by(email: email)
+  end
+
+  def member_already_exist
+    if user_found?
+      @member = @board.members.find_by(user_id: @user.id)
+      errors.add(:email, 'This user is already member of this board') if @member
+    end
   end
 
   def persist!
