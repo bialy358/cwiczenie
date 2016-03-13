@@ -15,7 +15,7 @@ class ControlPanel::ControlPanelController < ApplicationController
   end
 
   def require_member
-    return if find_board.members.map { |a| a.user_id}.include?(current_user.id)
+    return if current_user.boards.find_by(id: find_board.id)
     redirect_to control_panel_boards_path, alert: t('auth.failure.member')
   end
 end
