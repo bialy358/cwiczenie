@@ -1,4 +1,11 @@
 <%= form_for [:control_panel, @board, @story] do |f| %>
+    <%if @story.errors.any?%>
+        <ul>
+          <% @story.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+          <% end %>
+        </ul>
+    <% end %>
     <%= f.label :title %>
     <%= f.text_field :title %>
     <br>
