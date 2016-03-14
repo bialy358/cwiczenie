@@ -27,10 +27,8 @@ class MemberForm
   end
 
   def new_member_is_owner
-    if user_found?
-      errors.add(:email, 'You are owner of this board') if @user.id == @board.owner_id
-    end
-
+    return unless user_found?
+    errors.add(:email, 'You are owner of this board') if @user.id == @board.owner_id
   end
 
   def user_found?
@@ -40,10 +38,9 @@ class MemberForm
   end
 
   def member_already_exist
-    if user_found?
-      @member = @board.members.find_by(user_id: @user.id)
-      errors.add(:email, 'This user is already member of this board') if @member
-    end
+    return unless user_found?
+    @member = @board.members.find_by(user_id: @user.id)
+    errors.add(:email, 'This user is already member of this board') if @member
   end
 
   def persist!
