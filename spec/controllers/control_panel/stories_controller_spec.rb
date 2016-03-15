@@ -4,10 +4,14 @@ RSpec.describe ControlPanel::StoriesController do
   context "user logged in" do
     let(:user)  { create :user }
     let(:board) { create :board, owner_id: user.id }
+    let(:member) { create :member, user_id: user.id, board_id: board.id}
     let(:story) { create :story, board_id: board.id}
 
     context "User signed in" do
       before { sign_in(user) }
+
+      context "is member of board" do
+        before { member }
 
       describe " GET #index" do
         it "renders stories#index" do
@@ -137,6 +141,7 @@ RSpec.describe ControlPanel::StoriesController do
           expect(flash[:notice]).presence
         end
       end
+      end #context 'is a member of board'
     end # context 'User logged in'
 
     context "User not logged in" do

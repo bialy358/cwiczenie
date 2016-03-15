@@ -1,0 +1,14 @@
+<%= form_for [:control_panel, @member_form], url: control_panel_board_members_path do |f| %>
+    <%if @member_form.errors.any?%>
+        <ul>
+          <% @member_form.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+    <% end %>
+    <%= f.label :email %>
+    <%= f.email_field :email %>
+    <%= f.hidden_field :board_id, value: @board.id %>
+    <br>
+    <%= f.submit %>
+<% end %>

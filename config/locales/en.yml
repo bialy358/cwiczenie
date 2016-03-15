@@ -20,12 +20,13 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  admin:
-    auth:
-      failure: Entrance permited. Admin status required.
-  user:
-    auth:
-      failure: Entrance permited. Please log in.
+  auth:
+    failure:
+      user: Entrance permited. Please log in.
+      admin: Entrance permited. Admin status required.
+      member: Sorry only members of this board can do this.
+      owner: Sorry only owner of this board can do this.
+
   shared:
     created: Successfully created.
     updated: Successfully updated.

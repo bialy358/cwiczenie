@@ -1,5 +1,5 @@
 class ControlPanel::StoriesController < ControlPanel::ControlPanelController
-
+  before_action :require_member
   def index
     board = find_board
     @stories = board.stories
@@ -55,4 +55,5 @@ class ControlPanel::StoriesController < ControlPanel::ControlPanelController
   def find_board
     Board.find(params[:board_id])
   end
+
 end

@@ -12,6 +12,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'devise', '~> 3.5.2'
 gem 'bootstrap-sass', '~> 3.3.6'
 gem 'pry'
+gem 'draper', '~> 2.1.0'
 
 group :development do
   gem 'web-console', '~> 2.0'
